@@ -1,0 +1,28 @@
+TODO
+
+Index
+1. Graphics & Rendering (samson)
+2. Network ()
+X. Other stuff...
+
+====================================================================
+1. Graphics & Rendering 
+====================================================================
+* Window system for overlay
+	- Orthographic texture rendering
+	- Menus (main, options, health view, ...) with buttons
+	
+* TextureFactory.UpdateFromUrl() needs to be asynchronous	
+
+====================================================================
+2. Network
+====================================================================
+
+
+====================================================================
+X. Other stuff...
+====================================================================
+* Load CameraPreview into Texture
+	- For a nice augmented reality
+
+* OpenGLtest - more map tiles...

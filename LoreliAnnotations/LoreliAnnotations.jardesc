@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="WINDOWS-1252" standalone="no"?>
+<jardesc>
+    <jar path="LoreliAnnotations/LoreliAnnotations.jar"/>
+    <options buildIfNeeded="true" compress="true" descriptionLocation="/LoreliAnnotations/LoreliAnnotations.jardesc" exportErrors="true" exportWarnings="true" includeDirectoryEntries="true" overwrite="true" saveDescription="true" storeRefactorings="false" useSourceFolders="false"/>
+    <storedRefactorings deprecationInfo="true" structuralOnly="false"/>
+    <selectedProjects/>
+    <manifest generateManifest="true" manifestLocation="" manifestVersion="1.0" reuseManifest="false" saveManifest="false" usesManifest="true">
+        <sealing sealJar="true">
+            <packagesToSeal/>
+            <packagesToUnSeal/>
+        </sealing>
+    </manifest>
+    <selectedElements exportClassFiles="true" exportJavaFiles="false" exportOutputFolder="false">
+        <file path="/LoreliAnnotations/.project"/>
+        <folder path="/LoreliAnnotations/META-INF"/>
+        <javaElement handleIdentifier="=LoreliAnnotations/src"/>
+        <file path="/LoreliAnnotations/.classpath"/>
+        <javaElement handleIdentifier="=LoreliAnnotations/LoreliAdditionalTools"/>
+    </selectedElements>
+</jardesc>
