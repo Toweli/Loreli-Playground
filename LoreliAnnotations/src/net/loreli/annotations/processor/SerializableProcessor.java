@@ -49,30 +49,10 @@ public class SerializableProcessor extends AbstractProcessor {
 				+ oSerializable.id();
 		processingEnv.getMessager().printMessage(Diagnostic.Kind.NOTE, message);
 		try {
-			JavaFileObject oFile = processingEnv.getFiler().createSourceFile(
-					oType.getQualifiedName() + "Creator");
-			JavaClassGenerator oClassGenerator = new JavaClassGenerator(
-					oPackage.getQualifiedName().toString(),
-					oType.getSimpleName() + "Creator", "", "ICreator<"
-							+ oType.getSimpleName() + "Serializable>");
-			oClassGenerator.addImports(
-					"net.loreli.test.serialization.ICreator",
-					"net.loreli.base.ISerializable", oType.getQualifiedName()
-							+ "Serializable");
-			AbstractMethodGenerator oMethod = oClassGenerator.createMethod(
-					Scope.PUBLIC, "int", "getID");
-			oMethod.addLine("return " + oSerializable.id());
-
-			oMethod = oClassGenerator.createMethod(Scope.PUBLIC,
-					oType.getSimpleName() + "Serializable", "createObject");
-			oMethod.addLine("return new " + oType.getSimpleName()
-					+ "Serializable()");
-
-			PrintWriter oPrinter = new PrintWriter(oFile.openWriter());
-			oPrinter.write(oClassGenerator.generate());
-			oPrinter.flush();
-			oPrinter.close();
-
+			PrintWriter oPrinter;
+			JavaFileObject oFile;
+			JavaClassGenerator oClassGenerator;
+			AbstractMethodGenerator oMethod;
 			
 			oFile = processingEnv.getFiler().createSourceFile(
 					oType.getQualifiedName() + "Serializable");
@@ -87,7 +67,7 @@ public class SerializableProcessor extends AbstractProcessor {
 			
 			oMethod = oClassGenerator.createMethod(Scope.PUBLIC, "int",
 					"serialize", new Parameter("ISerializer", "oSerializer"));
-			oMethod.addLine("int iLength = 0");
+			oMethod.addLine("int iLength = 0;");
 			for (Field oField : oSerializable.fields()) {
 				for(Element oNestedElement : oType.getEnclosedElements())
 				{
@@ -96,20 +76,20 @@ public class SerializableProcessor extends AbstractProcessor {
 						ExecutableElement oExec = (ExecutableElement) oNestedElement;
 						if(oExec.getSimpleName().toString().equals(oField.get()))
 						{
-							oMethod.addLine(oExec.getReturnType().toString() + " o" + oField.get() + " = "  + oField.get() + "()");
+							oMethod.addLine(oExec.getReturnType().toString() + " o" + oField.get() + " = "  + oField.get() + "();");
 						}
 					}
 				}
 			}
-			oMethod.addLine("return iLength");
+			oMethod.addLine("return iLength;");
 
 			
 			oMethod = oClassGenerator.createMethod(Scope.PUBLIC, "int",
 					"deserialize", new Parameter("IDeSerializer",
 							"oDeSerializer"));
-			oMethod.addLine("int iLength = 0");
+			oMethod.addLine("int iLength = 0;");
 
-			oMethod.addLine("return iLength");
+			oMethod.addLine("return iLength;");
 
 			oPrinter = new PrintWriter(oFile.openWriter());
 			oPrinter.write(oClassGenerator.generate());

@@ -12,9 +12,9 @@
     </manifest>
     <selectedElements exportClassFiles="true" exportJavaFiles="false" exportOutputFolder="false">
         <file path="/LoreliAnnotations/.project"/>
-        <folder path="/LoreliAnnotations/META-INF"/>
         <javaElement handleIdentifier="=LoreliAnnotations/src"/>
         <file path="/LoreliAnnotations/.classpath"/>
-        <javaElement handleIdentifier="=LoreliAnnotations/LoreliAdditionalTools"/>
+        <javaElement handleIdentifier="=LoreliAnnotations/resources"/>
+        <javaElement handleIdentifier="=LoreliAdditionalTools/src"/>
     </selectedElements>
 </jardesc>
