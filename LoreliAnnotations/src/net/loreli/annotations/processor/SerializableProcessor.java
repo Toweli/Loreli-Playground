@@ -1,5 +1,6 @@
 package net.loreli.annotations.processor;
 
+import java.io.PrintWriter;
 import java.io.Writer;
 import java.util.List;
 import java.util.Set;
@@ -91,9 +92,8 @@ public class SerializableProcessor extends AbstractProcessor {
 			}
 			
 			try {
-				Writer oWriter = oFile.openWriter();
-				oWriter.append(oGenerator.generate());
-				oWriter.flush();
+				PrintWriter oWriter = new PrintWriter(oFile.openWriter());
+				oWriter.print(oGenerator.generate());
 				oWriter.close();
 			} catch (Exception e) {
 			}

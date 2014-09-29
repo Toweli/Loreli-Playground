@@ -1,1 +1,2 @@
 net.loreli.annotations.processor.SerializableProcessor
+net.loreli.annotations.processor.ADataModelProcessor
