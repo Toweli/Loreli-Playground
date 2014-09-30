@@ -33,7 +33,8 @@ public class DataModelGenerator {
 			"	{\n" +
 			"		return \"%2$sDataModel\";\n" +
 			"	}\n" +
-			"	%5$s}\n";
+			"\n" +
+			"%5$s}\n";
 	
 	
 	public String getName() {
