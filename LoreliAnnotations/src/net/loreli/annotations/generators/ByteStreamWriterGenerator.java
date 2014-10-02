@@ -4,37 +4,51 @@ import net.loreli.annotations.ADataField;
 
 public class ByteStreamWriterGenerator {
 	private String m_strName;
+	private int m_iID;
 	private String m_strBaseModel;
 	private String m_strPackage;
 	private ADataField[] m_oDataFields;
 	
-	private static final String m_strAttributeTemplate =
-			"	private %1$s m_%2$s;\n";
-	private static final String m_strGetterSetterTemplate =
-			"	public %1$s %3$s%2$s()" +
-			"	{\n" +
-			"		return m_%2$s;\n" +
-			"	}\n" +
-			"\n" +
-			"	public void set%2$s(%1$s %2$s)\n" +
-			"	{\n" +
-			"		m_%2$s = %2$s;\n" +
-			"	}\n";
+	private static final String m_strWriteTemplate =
+			"		ReaderWriterRegistry.getInstance().getReaderWriter(%1$s.class).writeObject(oObject.%3$s%2$s(), oSerializer);\n";
 	
-	private static final String m_strDataModelTemplate = 
+	private static final String m_strReadTemplate =
+			"		oResult.set%2$s(ReaderWriterRegistry.getInstance().getReaderWriter(%1$s.class).readObject(oSerializer));\n";
+	
+	private static final String m_strByteStreamWriterTemplate = 
 			"package %1$s;\n" +
 			"\n" +
-			"public class %2$sDataModel extends %3$s\n" +
+			"import java.io.IOException;\n" +
+			"\n" +
+			"import net.loreli.serialization.IReader;\n" +
+			"import net.loreli.serialization.IObjectReaderWriter;\n" +
+			"import net.loreli.serialization.IWriter;\n" +
+			"import net.loreli.serialization.ReaderWriterRegistry;\n" +
+			"\n" +
+			"public class %2$sReaderWriter implements IObjectReaderWriter<%2$s>\n" +
 			"{\n" +
-			"%4$s\n" +
-			"	\n" +
+			"\n" +
 			"	@Override\n" +
-			"	public String getDataModelName()\n" +
+			"	public void writeObject(%2$s oObject, IWriter oSerializer)\n" +
 			"	{\n" +
-			"		return \"%2$sDataModel\";\n" +
+			"		ReaderWriterRegistry.getInstance().getReaderWriter(%3$s.class).writeObject(oObject, oSerializer);\n" +
+			"%5$s" +
 			"	}\n" +
 			"\n" +
-			"%5$s}\n";
+			"	@Override\n" +
+			"	public %2$s readObject(IReader oSerializer) throws IOException\n" +
+			"	{\n" +
+			"		%2$s oResult = new %2$s();\n" +
+			"%6$s" +
+			"		return oResult;\n" +
+			"	}\n" +
+			"\n" +
+			"	@Override\n" +
+			"	public int getID()\n" +
+			"	{\n" +
+			"		return %4$d;\n" +
+			"	}\n" +
+			"}";
 	
 	
 	public String getName() {
@@ -42,6 +56,14 @@ public class ByteStreamWriterGenerator {
 	}
 	public void setName(String strName) {
 		this.m_strName = strName;
+	}
+	public int getID()
+	{
+		return m_iID;
+	}
+	public void setID(int iID)
+	{
+		m_iID = iID;
 	}
 	public String getBaseModel() {
 		return m_strBaseModel;
@@ -64,16 +86,16 @@ public class ByteStreamWriterGenerator {
 	
 	public String generate()
 	{
-		StringBuilder oAttributes = new StringBuilder();
-		StringBuilder oGetterSetter = new StringBuilder();
+		StringBuilder oRead = new StringBuilder();
+		StringBuilder oWrite = new StringBuilder();
 		
 		for(ADataField oField : m_oDataFields)
 		{
-			oAttributes.append(String.format(m_strAttributeTemplate, oField.type(), oField.name()));
-			oGetterSetter.append(String.format(m_strGetterSetterTemplate, oField.type(), oField.name(), oField.type().equals(boolean.class.getName())?"is":"get"));
+			oRead.append(String.format(m_strReadTemplate, oField.type(), oField.name()));
+			oWrite.append(String.format(m_strWriteTemplate, oField.type(), oField.name(), oField.type().equals(boolean.class.getName())?"is":"get"));
 		}
 		
-		return String.format(m_strDataModelTemplate, m_strPackage, m_strName, m_strBaseModel, oAttributes.toString(), oGetterSetter.toString()); 
+		return String.format(m_strByteStreamWriterTemplate, m_strPackage, m_strName, m_strBaseModel, m_iID, oWrite.toString(), oRead.toString()); 
 				//m_strPackage, m_strName, m_oBaseModel.getName(), "", "");
 		//);
 	}

@@ -15,12 +15,14 @@ import javax.lang.model.element.TypeElement;
 import javax.tools.JavaFileObject;
 
 import net.loreli.annotations.ADataModel;
+import net.loreli.annotations.generators.ByteStreamWriterGenerator;
 import net.loreli.annotations.generators.DataModelGenerator;
 
 @SupportedAnnotationTypes("net.loreli.annotations.ADataModel")
 @SupportedSourceVersion(SourceVersion.RELEASE_7)
 public class ADataModelProcessor extends AbstractProcessor {
 
+	private int m_iID = 10;
 	
 	
 	@Override
@@ -53,6 +55,24 @@ public class ADataModelProcessor extends AbstractProcessor {
 			try {
 				PrintWriter oWriter = new PrintWriter(oFile.openWriter());
 				oWriter.println(oGenerator.generate());
+				oWriter.close();
+			} catch (Exception e) {
+			}
+			
+			
+			oFile = processingEnv.getFiler().createSourceFile(
+					oType.getQualifiedName() + "ReaderWriter");
+
+			ByteStreamWriterGenerator oStreamGenerator = new ByteStreamWriterGenerator();
+			oStreamGenerator.setPackage(oPackage.getQualifiedName().toString());
+			oStreamGenerator.setID(m_iID++);
+			oStreamGenerator.setBaseModel(oADataModel.baseDataModel());
+			oStreamGenerator.setName(oType.getSimpleName().toString());
+			oStreamGenerator.setDataFields(oADataModel.fields());
+						
+			try {
+				PrintWriter oWriter = new PrintWriter(oFile.openWriter());
+				oWriter.println(oStreamGenerator.generate());
 				oWriter.close();
 			} catch (Exception e) {
 			}
